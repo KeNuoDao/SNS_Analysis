@@ -14,50 +14,56 @@ data = {
 
 df = pd.DataFrame(data)
 
-# Define the independent variables (X) and the dependent variable (y)
-X = df[['Age Group', 'Gender', 'Education Level', 'Income Level', 'Relatedness Satisfaction', 'Self-Presentation Satisfaction']]
-y = df['SNS Addiction']
+# Define the independent variables (X)
+X = df[['Age Group', 'Gender', 'Education Level', 'Income Level']]
 
 # Add a constant to the independent variables
 X = sm.add_constant(X)
 
-# Fit the linear regression model
-model = sm.OLS(y, X).fit()
+# Fit the linear regression models for each dependent variable
+model_relatedness = sm.OLS(df['Relatedness Satisfaction'], X).fit()
+model_self_presentation = sm.OLS(df['Self-Presentation Satisfaction'], X).fit()
+model_sns_addiction = sm.OLS(df['SNS Addiction'], X).fit()
 
-# Print the summary of the regression
-print(model.summary())
+# Print the summaries of the regressions
+print("Relatedness Satisfaction Model Summary:")
+print(model_relatedness.summary())
+print("\nSelf-Presentation Satisfaction Model Summary:")
+print(model_self_presentation.summary())
+print("\nSNS Addiction Model Summary:")
+print(model_sns_addiction.summary())
 
-# Function to predict SNS addiction level based on input data
-def predict_sns_addiction(age_group, gender, education_level, income_level, relatedness_satisfaction, self_presentation_satisfaction):
+# Function to predict all three factors based on input data
+def predict_factors(age_group, gender, education_level, income_level):
     input_data = pd.DataFrame({
         'const': [1],
         'Age Group': [age_group],
         'Gender': [gender],
         'Education Level': [education_level],
-        'Income Level': [income_level],
-        'Relatedness Satisfaction': [relatedness_satisfaction],
-        'Self-Presentation Satisfaction': [self_presentation_satisfaction]
+        'Income Level': [income_level]
     })
-    prediction = model.predict(input_data)
-    return prediction[0]
+    
+    relatedness_pred = model_relatedness.predict(input_data)[0]
+    self_presentation_pred = model_self_presentation.predict(input_data)[0]
+    sns_addiction_pred = model_sns_addiction.predict(input_data)[0]
+    
+    return relatedness_pred, self_presentation_pred, sns_addiction_pred
 
-# Example of predicting SNS addiction level for a new input
+# Example of predicting factors for a new input
 new_data = {
     'Age Group': 25,
     'Gender': 1,  # Male
     'Education Level': 3,  # Employed
     'Income Level': 3,  # 1000-3000
-    'Relatedness Satisfaction': 5,
-    'Self-Presentation Satisfaction': 5
 }
 
-predicted_addiction = predict_sns_addiction(
+relatedness_pred, self_presentation_pred, sns_addiction_pred = predict_factors(
     new_data['Age Group'],
     new_data['Gender'],
     new_data['Education Level'],
-    new_data['Income Level'],
-    new_data['Relatedness Satisfaction'],
-    new_data['Self-Presentation Satisfaction']
+    new_data['Income Level']
 )
 
-print(f"Predicted SNS Addiction Level: {predicted_addiction:.2f}")
+print(f"Predicted Relatedness Satisfaction: {relatedness_pred:.2f}")
+print(f"Predicted Self-Presentation Satisfaction: {self_presentation_pred:.2f}")
+print(f"Predicted SNS Addiction: {sns_addiction_pred:.2f}")
