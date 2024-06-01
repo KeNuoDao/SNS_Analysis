@@ -15,38 +15,36 @@ data = {
 
 df = pd.DataFrame(data)
 
-# Compute the correlation matrix
 correlation_matrix = df.corr()
 
-# Plot the heatmap of the correlation matrix
 plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
 plt.title('Correlation Matrix Heatmap')
 plt.show()
 
-# Pairplot to visualize relationships between variables
+
 sns.pairplot(df)
 plt.show()
 
-# Scatter plot for SNS Addiction vs Relatedness Satisfaction
+
 plt.figure(figsize=(8, 6))
 sns.scatterplot(data=df, x='Relatedness Satisfaction', y='SNS Addiction', hue='Gender')
 plt.title('SNS Addiction vs Relatedness Satisfaction')
 plt.show()
 
-# Scatter plot for SNS Addiction vs Self-Presentation Satisfaction
+
 plt.figure(figsize=(8, 6))
 sns.scatterplot(data=df, x='Self-Presentation Satisfaction', y='SNS Addiction', hue='Gender')
 plt.title('SNS Addiction vs Self-Presentation Satisfaction')
 plt.show()
 
-# Boxplot for SNS Addiction across different Age Groups
+
 plt.figure(figsize=(10, 6))
 sns.boxplot(data=df, x='Age Group', y='SNS Addiction', palette='Set3')
 plt.title('SNS Addiction across Age Groups')
 plt.show()
 
-# Boxplot for SNS Addiction across different Education Levels
+
 plt.figure(figsize=(10, 6))
 sns.boxplot(data=df, x='Education Level', y='SNS Addiction', palette='Set3')
 plt.title('SNS Addiction across Education Levels')
